@@ -5,7 +5,10 @@ import type { Recipes } from '~lib/recipes'
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data)
 
-export function useRecipes(search: string): {
+export function useRecipes(
+  search: string,
+  initialData: Recipes
+): {
   recipes?: Recipes
   isLoadingInitialData: boolean
   isLoadingMore: boolean
@@ -21,11 +24,15 @@ export function useRecipes(search: string): {
     fetcher
   )
 
-  const isLoadingInitialData = !data && !error
+  const isLoadingInitialData = !data && !error && search !== ''
   const isEmpty = data?.[0].recipes.length === 0
 
   return {
-    recipes: data && data.map((list) => list.recipes as Recipes).flat(),
+    recipes: data
+      ? data.map((list) => list.recipes as Recipes).flat()
+      : search === ''
+      ? initialData
+      : undefined,
     isError: error,
     size,
     setSize,

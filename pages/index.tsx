@@ -2,13 +2,14 @@ import styles from '~styles/Home.module.css'
 import { useState, createElement } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRecipes } from '~hooks/useRecipes'
 import { useRecipesAutocomplete } from '~hooks/useRecipesAutocomplete'
 import { AutoComplete, List, Space, Spin, Input, Card } from 'antd'
-import { ClockCircleOutlined } from '@ant-design/icons'
 import debounce from 'lodash/debounce'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import Link from 'next/link'
+import type { InferGetStaticPropsType, GetStaticProps } from 'next'
+import { getRecipes } from '~lib/recipes'
 
 const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
   <Space>
@@ -17,12 +18,14 @@ const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
   </Space>
 )
 
-export default function Home() {
+export default function Home({
+  recipes: initialRecipes,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const [searchQuery, setSearch] = useState<string>('')
 
   const { data: autocompleteQueries } = useRecipesAutocomplete(searchQuery)
   const { recipes, size, setSize, isLoadingInitialData, isReachingEnd } =
-    useRecipes(searchQuery)
+    useRecipes(searchQuery, initialRecipes)
 
   return (
     <>
@@ -98,4 +101,11 @@ export default function Home() {
       </main>
     </>
   )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  const recipes = await getRecipes('', 0)
+  return {
+    props: { recipes },
+  }
 }

@@ -81,7 +81,7 @@ export default function Home() {
                         width={item.image.width || 312}
                         height={item.image.height || 231}
                         alt={item.title}
-                        style={{ objectFit: 'cover' }}
+                        style={{ objectFit: 'cover', height: '250px' }}
                         priority={
                           index === 0
                         } /* Give priority to the item above-the-fold, for better LCP */

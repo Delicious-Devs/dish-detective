@@ -30,6 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
             fill
             alt="Delicious Devs"
             style={{ objectFit: 'contain' }}
+            priority
           />
         </header>
         <div id="appContainer">

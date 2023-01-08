@@ -97,7 +97,7 @@ export default function Home() {
                         />
                       }
                     >
-                      <List.Item.Meta title={<a>{item.title}</a>} />
+                      <List.Item.Meta title={item.title} />
                     </List.Item>
                   </Card>
                 </Link>

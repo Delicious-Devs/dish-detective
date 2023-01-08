@@ -4,8 +4,18 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useRecipes } from '~hooks/useRecipes'
 import { useRecipesAutocomplete } from '~hooks/useRecipesAutocomplete'
-import { AutoComplete, List, Space, Spin, Input } from 'antd'
-import { ClockCircleOutlined } from '@ant-design/icons'
+import {
+  AutoComplete,
+  List,
+  Space,
+  Spin,
+  Input,
+  Button,
+  Row,
+  Col,
+  Card,
+} from 'antd'
+import { ClockCircleOutlined, HomeOutlined } from '@ant-design/icons'
 import { useDebounce } from 'react-use'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
@@ -43,17 +53,36 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.container}>
-        <AutoComplete
-          options={
-            autocompleteQueries
-              ? autocompleteQueries.map((query) => ({ value: query }))
-              : [{ value: searchQuery }]
-          }
-          className={styles.searchBar}
-          onSearch={(data: string) => setSearch(data)}
-        >
-          <Input.Search size="large" placeholder="Search for recipes" />
-        </AutoComplete>
+        <Row style={{ gap: '10px', alignItems: 'center', width: '100%' }}>
+          <Col>
+            <Button
+              type="primary"
+              icon={<HomeOutlined />}
+              onClick={() => {
+                setSearch('')
+                setSize(1)
+              }}
+            />
+          </Col>
+          <Col flex="auto">
+            <AutoComplete
+              options={
+                autocompleteQueries
+                  ? autocompleteQueries.map((query) => ({ value: query }))
+                  : [{ value: searchQuery }]
+              }
+              onSelect={(data: string) => setSearch(data)}
+              className={styles.searchBar}
+              value={searchQuery}
+            >
+              <Input.Search
+                onChange={(event) => setSearch(event.target.value)}
+                size="large"
+                placeholder="Search for recipes"
+              />
+            </AutoComplete>
+          </Col>
+        </Row>
 
         {isLoadingInitialData && (
           <div className={styles.spinContainer}>
@@ -79,33 +108,35 @@ export default function Home() {
               className={styles.recipesContainer}
               dataSource={recipes}
               renderItem={(item, index) => (
-                <List.Item
-                  key={item.title}
-                  actions={[
-                    ...(item.cookingMinutes > 0
-                      ? [
-                          <IconText
-                            icon={ClockCircleOutlined}
-                            text={`${item.cookingMinutes} minutes`}
-                            key="list-vertical-star-o"
-                          />,
-                        ]
-                      : []),
-                  ]}
-                  extra={
-                    <Image
-                      src={item.image.url}
-                      width={item.image.width || 312}
-                      height={item.image.height || 231}
-                      alt={item.title}
-                      priority={
-                        index === 0
-                      } /* Give priority to the item above-the-fold, for better LCP */
-                    />
-                  }
-                >
-                  <List.Item.Meta title={<a>{item.title}</a>} />
-                </List.Item>
+                <Card hoverable style={{ margin: '1rem 0' }}>
+                  <List.Item
+                    key={item.title}
+                    actions={[
+                      ...(item.cookingMinutes > 0
+                        ? [
+                            <IconText
+                              icon={ClockCircleOutlined}
+                              text={`${item.cookingMinutes} minutes`}
+                              key="list-vertical-star-o"
+                            />,
+                          ]
+                        : []),
+                    ]}
+                    extra={
+                      <Image
+                        src={item.image.url}
+                        width={item.image.width || 312}
+                        height={item.image.height || 231}
+                        alt={item.title}
+                        priority={
+                          index === 0
+                        } /* Give priority to the item above-the-fold, for better LCP */
+                      />
+                    }
+                  >
+                    <List.Item.Meta title={<a>{item.title}</a>} />
+                  </List.Item>
+                </Card>
               )}
             />
           </InfiniteScroll>

@@ -1,1 +1,13 @@
 @import 'antd/dist/reset.css';
+
+#appContainer {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.appHeader {
+  height: 250px;
+  width: 100%;
+  background-color: #f59e0b;
+  position: relative;
+}

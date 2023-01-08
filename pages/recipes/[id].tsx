@@ -63,18 +63,22 @@ export default function RecipeDetails() {
               {recipeDetails ? (
                 <>
                   <h2 style={{ margin: '1rem 0' }}>Instructions</h2>
-                  {recipeDetails.instructions.map((details) => (
-                    <Timeline key={details.name}>
-                      {details.name && (
-                        <h3 style={{ fontWeight: 500 }}>{details.name}</h3>
-                      )}
-                      {details.steps.map((step) => (
-                        <Timeline.Item key={step.step}>
-                          {step.step}
-                        </Timeline.Item>
-                      ))}
-                    </Timeline>
-                  ))}
+                  {recipeDetails.instructions.length ? (
+                    recipeDetails.instructions.map((details) => (
+                      <Timeline key={details.name}>
+                        {details.name && (
+                          <h3 style={{ fontWeight: 500 }}>{details.name}</h3>
+                        )}
+                        {details.steps.map((step) => (
+                          <Timeline.Item key={step.step}>
+                            {step.step}
+                          </Timeline.Item>
+                        ))}
+                      </Timeline>
+                    ))
+                  ) : (
+                    <p>No instructions</p>
+                  )}
                 </>
               ) : (
                 <Skeleton />

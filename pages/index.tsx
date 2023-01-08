@@ -72,33 +72,23 @@ export default function Home() {
               dataSource={recipes}
               renderItem={(item, index) => (
                 <Link key={item.title} href={`/recipes/${item.id}`}>
-                  <Card hoverable style={{ margin: '1rem 0' }}>
-                    <List.Item
-                      actions={[
-                        ...(item.cookingMinutes > 0
-                          ? [
-                              <IconText
-                                icon={ClockCircleOutlined}
-                                text={`${item.cookingMinutes} minutes`}
-                                key="list-vertical-star-o"
-                              />,
-                            ]
-                          : []),
-                      ]}
-                      extra={
-                        <Image
-                          src={item.image.url}
-                          width={item.image.width || 312}
-                          height={item.image.height || 231}
-                          alt={item.title}
-                          priority={
-                            index === 0
-                          } /* Give priority to the item above-the-fold, for better LCP */
-                        />
-                      }
-                    >
-                      <List.Item.Meta title={item.title} />
-                    </List.Item>
+                  <Card
+                    hoverable
+                    style={{ margin: '1rem 0' }}
+                    cover={
+                      <Image
+                        src={item.image.url}
+                        width={item.image.width || 312}
+                        height={item.image.height || 231}
+                        alt={item.title}
+                        style={{ objectFit: 'cover' }}
+                        priority={
+                          index === 0
+                        } /* Give priority to the item above-the-fold, for better LCP */
+                      />
+                    }
+                  >
+                    <Card.Meta title={item.title} />
                   </Card>
                 </Link>
               )}

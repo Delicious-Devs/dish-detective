@@ -1,0 +1,6 @@
+.spinContainer {
+  width: 100%;
+  padding: 5rem 0;
+  display: grid;
+  place-content: center;
+}

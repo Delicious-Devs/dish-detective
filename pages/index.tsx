@@ -8,6 +8,7 @@ import { AutoComplete, List, Space, Spin, Input, Card } from 'antd'
 import { ClockCircleOutlined } from '@ant-design/icons'
 import debounce from 'lodash/debounce'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import Link from 'next/link'
 
 const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
   <Space>
@@ -27,9 +28,6 @@ export default function Home() {
     <>
       <Head>
         <title>Dish Detective</title>
-        <meta name="description" content="Find your next meal with ease." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.container}>
         <AutoComplete
@@ -73,35 +71,36 @@ export default function Home() {
               className={styles.recipesContainer}
               dataSource={recipes}
               renderItem={(item, index) => (
-                <Card hoverable style={{ margin: '1rem 0' }}>
-                  <List.Item
-                    key={item.title}
-                    actions={[
-                      ...(item.cookingMinutes > 0
-                        ? [
-                            <IconText
-                              icon={ClockCircleOutlined}
-                              text={`${item.cookingMinutes} minutes`}
-                              key="list-vertical-star-o"
-                            />,
-                          ]
-                        : []),
-                    ]}
-                    extra={
-                      <Image
-                        src={item.image.url}
-                        width={item.image.width || 312}
-                        height={item.image.height || 231}
-                        alt={item.title}
-                        priority={
-                          index === 0
-                        } /* Give priority to the item above-the-fold, for better LCP */
-                      />
-                    }
-                  >
-                    <List.Item.Meta title={<a>{item.title}</a>} />
-                  </List.Item>
-                </Card>
+                <Link key={item.title} href={`/recipes/${item.id}`}>
+                  <Card hoverable style={{ margin: '1rem 0' }}>
+                    <List.Item
+                      actions={[
+                        ...(item.cookingMinutes > 0
+                          ? [
+                              <IconText
+                                icon={ClockCircleOutlined}
+                                text={`${item.cookingMinutes} minutes`}
+                                key="list-vertical-star-o"
+                              />,
+                            ]
+                          : []),
+                      ]}
+                      extra={
+                        <Image
+                          src={item.image.url}
+                          width={item.image.width || 312}
+                          height={item.image.height || 231}
+                          alt={item.title}
+                          priority={
+                            index === 0
+                          } /* Give priority to the item above-the-fold, for better LCP */
+                        />
+                      }
+                    >
+                      <List.Item.Meta title={<a>{item.title}</a>} />
+                    </List.Item>
+                  </Card>
+                </Link>
               )}
             />
           </InfiniteScroll>

@@ -4,7 +4,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useRecipes } from '~hooks/useRecipes'
 import { useRecipesAutocomplete } from '~hooks/useRecipesAutocomplete'
-import { AutoComplete, List, Space, Spin } from 'antd'
+import { AutoComplete, List, Space, Spin, Input } from 'antd'
 import { ClockCircleOutlined } from '@ant-design/icons'
 import { useDebounce } from 'react-use'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -51,8 +51,9 @@ export default function Home() {
           }
           className={styles.searchBar}
           onSearch={(data: string) => setSearch(data)}
-          placeholder="Search for recipes"
-        />
+        >
+          <Input.Search size="large" placeholder="Search for recipes" />
+        </AutoComplete>
 
         {isLoadingInitialData && (
           <div className={styles.spinContainer}>

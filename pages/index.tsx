@@ -4,18 +4,8 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useRecipes } from '~hooks/useRecipes'
 import { useRecipesAutocomplete } from '~hooks/useRecipesAutocomplete'
-import {
-  AutoComplete,
-  List,
-  Space,
-  Spin,
-  Input,
-  Button,
-  Row,
-  Col,
-  Card,
-} from 'antd'
-import { ClockCircleOutlined, HomeOutlined } from '@ant-design/icons'
+import { AutoComplete, List, Space, Spin, Input, Card } from 'antd'
+import { ClockCircleOutlined } from '@ant-design/icons'
 import debounce from 'lodash/debounce'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
@@ -42,29 +32,22 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.container}>
-        <Row style={{ gap: '10px', alignItems: 'center', width: '100%' }}>
-          <Col>
-            <Button type="primary" icon={<HomeOutlined />} />
-          </Col>
-          <Col flex="auto">
-            <AutoComplete
-              options={
-                autocompleteQueries
-                  ? autocompleteQueries.map((query) => ({ value: query }))
-                  : [{ value: searchQuery }]
-              }
-              onSearch={debounce((data: string) => setSearch(data), 300)}
-              onSelect={(data: string) => setSearch(data)}
-              className={styles.searchBar}
-            >
-              <Input.Search
-                size="large"
-                placeholder="Search for recipes"
-                allowClear
-              />
-            </AutoComplete>
-          </Col>
-        </Row>
+        <AutoComplete
+          options={
+            autocompleteQueries
+              ? autocompleteQueries.map((query) => ({ value: query }))
+              : [{ value: searchQuery }]
+          }
+          onSearch={debounce((data: string) => setSearch(data), 300)}
+          onSelect={(data: string) => setSearch(data)}
+          className={styles.searchBar}
+        >
+          <Input.Search
+            size="large"
+            placeholder="Search for recipes"
+            allowClear
+          />
+        </AutoComplete>
 
         {isLoadingInitialData && (
           <div className={styles.spinContainer}>

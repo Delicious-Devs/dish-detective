@@ -21,6 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Head>
           <meta name="description" content="Find your next meal with ease." />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="og:image" content="/banner.png" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <header className="appHeader">

@@ -3,6 +3,7 @@ import { useState, createElement } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRecipes } from '~hooks/useRecipes'
+import { useRecipesAutocomplete } from '~hooks/useRecipesAutocomplete'
 import { AutoComplete, List, Space, Spin } from 'antd'
 import { ClockCircleOutlined } from '@ant-design/icons'
 import { useDebounce } from 'react-use'
@@ -19,6 +20,8 @@ export default function Home() {
   const [searchQuery, setSearch] = useState<string>('')
   const [debouncedSearchQuery, setDebouncedSearch] = useState<string>('')
 
+  const { data: autocompleteQueries } =
+    useRecipesAutocomplete(debouncedSearchQuery)
   const { recipes, size, setSize, isLoadingInitialData, isReachingEnd } =
     useRecipes(debouncedSearchQuery)
 
@@ -41,7 +44,11 @@ export default function Home() {
       </Head>
       <main className={styles.container}>
         <AutoComplete
-          options={[{ value: searchQuery }]}
+          options={
+            autocompleteQueries
+              ? autocompleteQueries.map((query) => ({ value: query }))
+              : [{ value: searchQuery }]
+          }
           className={styles.searchBar}
           onSearch={(data: string) => setSearch(data)}
           placeholder="Search for recipes"
@@ -57,7 +64,7 @@ export default function Home() {
           <InfiniteScroll
             dataLength={recipes.length}
             next={() => setSize(size + 1)}
-            hasMore={!isReachingEnd && recipes.length > 0}
+            hasMore={!isReachingEnd}
             loader={
               <div className={styles.spinContainer}>
                 <Spin />
@@ -78,7 +85,7 @@ export default function Home() {
                       ? [
                           <IconText
                             icon={ClockCircleOutlined}
-                            text={`${item.cookingMinutes}`}
+                            text={`${item.cookingMinutes} minutes`}
                             key="list-vertical-star-o"
                           />,
                         ]

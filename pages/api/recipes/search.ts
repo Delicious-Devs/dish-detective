@@ -1,6 +1,10 @@
 import axios from 'axios'
 import { getImageDimensions } from '~lib/regex'
-import { SPOONACULAR_API_BASE_URL, SPOONACULAR_API_KEY } from '~lib/constants'
+import {
+  PAGE_SIZE,
+  SPOONACULAR_API_BASE_URL,
+  SPOONACULAR_API_KEY,
+} from '~lib/constants'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { Recipes } from '~lib/recipes'
 
@@ -23,6 +27,7 @@ export default async function handler(
     },
     params: {
       offset,
+      number: PAGE_SIZE,
       query: searchQuery,
       addRecipeInformation: true,
     },

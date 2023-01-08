@@ -16,7 +16,7 @@ import {
   Card,
 } from 'antd'
 import { ClockCircleOutlined, HomeOutlined } from '@ant-design/icons'
-import { useDebounce } from 'react-use'
+import debounce from 'lodash/debounce'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
@@ -28,21 +28,10 @@ const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
 
 export default function Home() {
   const [searchQuery, setSearch] = useState<string>('')
-  const [debouncedSearchQuery, setDebouncedSearch] = useState<string>('')
 
-  const { data: autocompleteQueries } =
-    useRecipesAutocomplete(debouncedSearchQuery)
+  const { data: autocompleteQueries } = useRecipesAutocomplete(searchQuery)
   const { recipes, size, setSize, isLoadingInitialData, isReachingEnd } =
-    useRecipes(debouncedSearchQuery)
-
-  useDebounce(
-    () => {
-      setDebouncedSearch(searchQuery)
-      setSize(1)
-    },
-    500,
-    [searchQuery]
-  )
+    useRecipes(searchQuery)
 
   return (
     <>
@@ -55,14 +44,7 @@ export default function Home() {
       <main className={styles.container}>
         <Row style={{ gap: '10px', alignItems: 'center', width: '100%' }}>
           <Col>
-            <Button
-              type="primary"
-              icon={<HomeOutlined />}
-              onClick={() => {
-                setSearch('')
-                setSize(1)
-              }}
-            />
+            <Button type="primary" icon={<HomeOutlined />} />
           </Col>
           <Col flex="auto">
             <AutoComplete
@@ -71,14 +53,14 @@ export default function Home() {
                   ? autocompleteQueries.map((query) => ({ value: query }))
                   : [{ value: searchQuery }]
               }
+              onSearch={debounce((data: string) => setSearch(data), 300)}
               onSelect={(data: string) => setSearch(data)}
               className={styles.searchBar}
-              value={searchQuery}
             >
               <Input.Search
-                onChange={(event) => setSearch(event.target.value)}
                 size="large"
                 placeholder="Search for recipes"
+                allowClear
               />
             </AutoComplete>
           </Col>

@@ -19,7 +19,7 @@ export default function Home() {
   const [searchQuery, setSearch] = useState<string>('')
   const [debouncedSearchQuery, setDebouncedSearch] = useState<string>('')
 
-  const { recipes, isError, size, setSize, isLoadingMore, isReachingEnd } =
+  const { recipes, size, setSize, isLoadingInitialData, isReachingEnd } =
     useRecipes(debouncedSearchQuery)
 
   useDebounce(
@@ -47,12 +47,17 @@ export default function Home() {
           placeholder="Search for recipes"
         />
 
+        {isLoadingInitialData && (
+          <div className={styles.spinContainer}>
+            <Spin />
+          </div>
+        )}
+
         {recipes && (
           <InfiniteScroll
             dataLength={recipes.length}
             next={() => setSize(size + 1)}
-            hasMore={!isReachingEnd}
-            endMessage={<p>You've reached the end.</p>}
+            hasMore={!isReachingEnd && recipes.length > 0}
             loader={
               <div className={styles.spinContainer}>
                 <Spin />
